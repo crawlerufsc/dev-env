@@ -20,7 +20,7 @@ RUN pip3 install --no-cache-dir -q sklearn  --upgrade
 RUN pip3 install --no-cache-dir -q scikit-image  --upgrade
 RUN pip3 install --no-cache-dir -q sympy --upgrade
 RUN pip3 install --no-cache-dir -q autopep8 --upgrade
-RUN pip3 install --no-cache-dir -q torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
+RUN pip3 install --no-cache-dir -q torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
 RUN pip3 install --no-cache-dir -q fastai --upgrade
 RUN pip3 install --no-cache-dir -qr https://raw.githubusercontent.com/ultralytics/yolov5/master/requirements.txt
 RUN pip3 install --no-cache-dir -q ipykernel --upgrade
@@ -28,7 +28,7 @@ RUN pip3 install --no-cache-dir -q av --upgrade
 RUN pip3 install --no-cache-dir -q ipywidgets --upgrade
 RUN pip3 install --no-cache-dir -q tensorboard --upgrade
 RUN pip3 install --no-cache-dir -q opencv-python --upgrade
-RUN pip3 install --no-cache-dir -q pygame --upgrade
+
 
 # ROS install
 RUN apt-get install -y curl
@@ -82,22 +82,27 @@ RUN apt-get install -y v4l-utils \
     gstreamer1.0-plugins-good \
     ubuntu-restricted-extras
     
-RUN apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev    
+RUN apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev    
+RUN apt-get install -y gir1.2-gst-rtsp-server-1.0
 
 
 # OMPL
 RUN apt-get install -y libompl-dev ompl-demos
+RUN curl -sSL https://ompl.kavrakilab.org/install-ompl-ubuntu.sh  > install-ompl-ubuntu.sh
+RUN chmod a+x ./install-ompl-ubuntu.sh
+#RUN sudo ./install-ompl-ubuntu.sh --python --app
+RUN sudo ./install-ompl-ubuntu.sh --python
+RUN rm ./install-ompl-ubuntu.sh
 
-
-RUN adduser --force-badname --disabled-password --gecos '' --shell /bin/bash -u 1000 driveless && \ 
+RUN adduser --force-badname --disabled-password --gecos '' --shell /bin/bash -u 1000 out0 && \ 
 	echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \ 
-	adduser driveless sudo && \ 
-	adduser driveless audio && \ 
-	adduser driveless video
+	adduser out0 sudo && \ 
+	adduser out0 audio && \ 
+	adduser out0 video
 
 
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
-RUN echo 'alias rs="source /opt/ros/galactic/setup.bash"' >> /home/driveless/.bashrc
+RUN echo 'alias rs="source /opt/ros/galactic/setup.bash"' >> /home/out0/.bashrc
 
