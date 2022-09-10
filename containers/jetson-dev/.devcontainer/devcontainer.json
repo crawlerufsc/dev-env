@@ -26,6 +26,7 @@
       "--env", "PULSE_SERVER=unix:/run/user/1000/pulse/native",
       "--volume", "/tmp/.X11-unix:/tmp/.X11-unix",
       "--volume", "/dev/video0:/dev/video0",
+      "--volume", "/home/cristiano/Documents/Projects/Mestrado/Project/driveless/vision:/home/nvidia/driveless",     
       "--runtime", "nvidia", 
       "-e", "SDL_HINT_CUDA_DEVICE=0",
       "-e", "NVIDIA_VISIBLE_DEVICES=0",

@@ -29,3 +29,19 @@ RUN export DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY
 # ENV DEBIAN_FRONTEND=noninteractive
 # RUN apt-get install -y ros-dashing-desktop
 # RUN apt-get install -y libvulkan1 mesa-vulkan-drivers vulkan-utils
+RUN echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
+RUN apt-get install -y v4l-utils \
+    gstreamer1.0-tools \
+    gstreamer1.0-plugins-ugly \
+    gstreamer1.0-plugins-bad \
+    gstreamer1.0-plugins-good \
+    ubuntu-restricted-extras
+    
+RUN apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev    
+RUN apt-get install -y gir1.2-gst-rtsp-server-1.0
+RUN apt-get install -y python3-dev python3-numpy
+
+# Carla Simulator client
+RUN apt-get install -y python3-pip
+RUN pip3 install --upgrade pip
+RUN pip3 install carla==0.9.13

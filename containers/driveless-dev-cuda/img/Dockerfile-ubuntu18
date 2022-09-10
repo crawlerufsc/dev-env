@@ -1,0 +1,38 @@
+#IMG-NAME: driveless-dev18-cuda-img
+FROM nvidia/cuda:11.7.1-runtime-ubuntu18.04
+SHELL ["/bin/bash", "-c"]
+ENV TZ=America/Sao_Paulo
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt-get update
+RUN apt-get install -y apt-utils
+RUN apt-get dist-upgrade -y
+
+# ROS install
+RUN apt-get install -y curl
+RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu bionic main" > /etc/apt/sources.list.d/ros-latest.list'
+RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
+RUN apt-get update
+RUN apt-get install -y python3-vcstool
+RUN apt-get install -y ros-melodic-octomap ros-melodic-octomap-msgs ros-melodic-octomap-rviz-plugins ros-melodic-dynamic-edt-3d  ros-melodic-rosmon python-catkin-tools
+
+
+# OMPL
+# RUN apt-get install -y libompl-dev ompl-demos
+# RUN curl -sSL https://ompl.kavrakilab.org/install-ompl-ubuntu.sh  > install-ompl-ubuntu.sh
+# RUN chmod a+x ./install-ompl-ubuntu.sh
+# RUN sudo ./install-ompl-ubuntu.sh --python
+# RUN rm ./install-ompl-ubuntu.sh
+
+RUN adduser --force-badname --disabled-password --gecos '' --shell /bin/bash -u 1000 out0 && \ 
+	echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \ 
+	adduser out0 sudo && \ 
+	adduser out0 audio && \ 
+	adduser out0 video
+
+
+ENV NOTVISIBLE "in users profile"
+RUN echo "export VISIBLE=now" >> /etc/profile
+
+RUN echo 'alias rs="source /opt/ros/galactic/setup.bash"' >> /home/out0/.bashrc
+

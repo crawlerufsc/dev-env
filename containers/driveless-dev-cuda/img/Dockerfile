@@ -58,18 +58,51 @@ RUN apt-get install -y build-essential cmake pkg-config libgtk-3-dev \
     libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev \
     sudo
 
-#RUN cd ~/opencv_build/opencv
+RUN apt-get install -y libgtk2.0-dev
+
+# RUN cd /tf/opencv/build && cmake -D CMAKE_BUILD_TYPE=RELEASE \
+#     -D CMAKE_INSTALL_PREFIX=/usr/local \
+#     -D INSTALL_C_EXAMPLES=ON \
+#     -D INSTALL_PYTHON_EXAMPLES=ON \
+#     -D OPENCV_GENERATE_PKGCONFIG=ON \
+#     -D OPENCV_EXTRA_MODULES_PATH=/tf/opencv_contrib/modules \
+#     -D BUILD_EXAMPLES=ON .. \
+#     -D WITH_GTK=ON
+
 RUN cd /tf/opencv/build && cmake -D CMAKE_BUILD_TYPE=RELEASE \
+    -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=/usr/local \
-    -D INSTALL_C_EXAMPLES=ON \
-    -D INSTALL_PYTHON_EXAMPLES=ON \
+    -D INSTALL_C_EXAMPLES=OFF \
+    -D INSTALL_PYTHON_EXAMPLES=OFF \
     -D OPENCV_GENERATE_PKGCONFIG=ON \
     -D OPENCV_EXTRA_MODULES_PATH=/tf/opencv_contrib/modules \
-    -D BUILD_EXAMPLES=ON ..
+    -D BUILD_EXAMPLES=OFF .. \
+    -D WITH_OPENMP=ON \
+    -D WITH_FFMPEG=ON \
+    -D WITH_OPENCL=OFF \
+    -D BUILD_ZLIB=ON \
+    -D BUILD_TIFF=ON \
+    -D WITH_FFMPEG=ON \
+    -D WITH_TBB=ON \
+    -D BUILD_TBB=ON \
+    -D BUILD_TESTS=OFF \
+    -D WITH_EIGEN=OFF \
+    -D WITH_GSTREAMER=ON \
+    -D WITH_V4L=ON \
+    -D WITH_LIBV4L=ON \
+    -D WITH_VTK=OFF \
+    -D WITH_GTK=ON \
+    -D WITH_QT=OFF \
+    -D OPENCV_ENABLE_NONFREE=ON \
+    -D PYTHON3_PACKAGES_PATH=/usr/local/lib/python3.8/site-packages/ \
+    -D OPENCV_GENERATE_PKGCONFIG=ON 
 
-RUN cd /tf/opencv/build && make -j12
+RUN cd /tf/opencv/build && make -j$(nproc)
 RUN cd /tf/opencv/build && make install
 
+# BUGFIX warning
+RUN apt-get install -y language-pack-en-base
+RUN dpkg-reconfigure locales
 ##-------------------------------
 
 
@@ -87,7 +120,7 @@ RUN apt-get install -y gir1.2-gst-rtsp-server-1.0
 
 
 # OMPL
-RUN apt-get install -y libompl-dev ompl-demos
+#RUN apt-get install -y libompl-dev ompl-demos
 RUN curl -sSL https://ompl.kavrakilab.org/install-ompl-ubuntu.sh  > install-ompl-ubuntu.sh
 RUN chmod a+x ./install-ompl-ubuntu.sh
 #RUN sudo ./install-ompl-ubuntu.sh --python --app

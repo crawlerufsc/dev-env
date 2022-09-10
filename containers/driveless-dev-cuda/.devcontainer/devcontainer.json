@@ -1,5 +1,5 @@
 {
-    "name": "driveless-devenv",
+    "name": "robot-devenv",
     "dockerFile": "../Dockerfile",
   
     "settings": {
@@ -29,11 +29,12 @@
       "--env", "PULSE_SERVER=unix:/run/user/1000/pulse/native",
       "--volume", "/tmp/.X11-unix:/tmp/.X11-unix",
       "--volume", "/dev/video0:/dev/video0",
-      "--volume", "~/.Xauthority:/home/driveless/.Xauthority:rw", 
+      "--volume", "/home/cristiano/.Xauthority:/home/out0/.Xauthority:rw", 
+      "--volume", "/home/cristiano/Documents/Projects/Mestrado/:/home/out0",
       "--runtime", "nvidia", 
       "-e", "SDL_HINT_CUDA_DEVICE=0",
       "-e", "NVIDIA_VISIBLE_DEVICES=0"
     ],
     
-    "remoteUser": "driveless"
+    "remoteUser": "out0"
   }
