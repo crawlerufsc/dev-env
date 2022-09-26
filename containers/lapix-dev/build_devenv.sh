@@ -1,2 +1,2 @@
 #! /bin/sh
-docker build -t driveless-dev-cuda-img -f img/Dockerfile .
+docker build -t lapix-dev-img -f img/Dockerfile .
