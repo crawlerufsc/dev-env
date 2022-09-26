@@ -1,5 +1,5 @@
 {
-    "name": "robot-devenv",
+    "name": "lapix-devenv",
     "dockerFile": "../Dockerfile",
   
     "settings": {
@@ -14,7 +14,7 @@
       "ms-vscode.cpptools-extension-pack"
     ],
   
-    "forwardPorts": ["8888:20000", "22:2222"],
+    "forwardPorts": ["8888:8888", "22:2222"],
   
     //"postCreateCommand": "yarn install",
   
@@ -36,5 +36,5 @@
       "-e", "NVIDIA_VISIBLE_DEVICES=0"
     ],
     
-    "remoteUser": "out0"
+    "remoteUser": "lapix"
   }

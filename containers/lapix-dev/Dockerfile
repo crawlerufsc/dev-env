@@ -1,2 +1,2 @@
-FROM driveless-dev-cuda-img
+FROM lapix-dev-img
 
