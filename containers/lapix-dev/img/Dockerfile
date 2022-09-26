@@ -12,7 +12,7 @@ RUN apt-get update
 RUN apt-get install -y apt-utils
 RUN apt-get dist-upgrade -y
 
-# Python, Pytorch
+# Python, Pytorch, FastAI + requirements for running Yolo5 and Yolo7
 RUN apt-get install -y python3-pip 
 RUN apt-get install -y python3-tk
 RUN pip3 install --upgrade pip
@@ -89,14 +89,14 @@ RUN dpkg-reconfigure locales
 
 # V4l2 (Video for linux utils, for debugging)
 # try: $ v4l2-ctl -d /dev/video0 --list-formats
-# RUN apt-get install -y v4l-utils \
-#     gstreamer1.0-tools \
-#     gstreamer1.0-plugins-ugly \
-#     gstreamer1.0-plugins-bad \
-#     gstreamer1.0-plugins-good \
-#     ubuntu-restricted-extras  
-# RUN apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev    
-# RUN apt-get install -y gir1.2-gst-rtsp-server-1.0
+RUN apt-get install -y v4l-utils \
+    gstreamer1.0-tools \
+    gstreamer1.0-plugins-ugly \
+    gstreamer1.0-plugins-bad \
+    gstreamer1.0-plugins-good \
+    ubuntu-restricted-extras  
+RUN apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev    
+RUN apt-get install -y gir1.2-gst-rtsp-server-1.0
 
 RUN adduser --force-badname --disabled-password --gecos '' --shell /bin/bash -u 1000 lapix && \ 
 	echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \ 
@@ -107,16 +107,13 @@ RUN adduser --force-badname --disabled-password --gecos '' --shell /bin/bash -u 
 
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
-#CMD jupyter notebook --ip 0.0.0.0 --no-browser --allow-root  --notebook-dir=/home/lapix/notebooks
 
-#ENV JUPYTER_DATA_DIR "/home/lapix/notebooks"
-
-USER root
 USER lapix
 RUN jupyter notebook --generate-config
 RUN mkdir -p /home/lapix/notebooks
 RUN echo "c.NotebookApp.notebook_dir=r'/home/lapix/notebooks'" >> /home/lapix/.jupyter/jupyter_notebook_config.py
 
+# Our lapix token for accessing this...
 RUN echo "c.NotebookApp.token='lapix123...'" >> /home/lapix/.jupyter/jupyter_notebook_config.py
 
 CMD jupyter notebook --ip 0.0.0.0 --no-browser --allow-root
