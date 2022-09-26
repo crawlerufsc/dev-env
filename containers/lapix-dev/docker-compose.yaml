@@ -1,0 +1,11 @@
+version: "1.0"
+services:
+  jupyter:
+    image: lapix-dev-img
+    build: 
+      context: .
+      dockerfile: img/Dockerfile
+    ports:
+      - "8888:8888"
+    volumes:
+      - /home/cristiano/notebooks:/home/lapix/notebooks:rw
